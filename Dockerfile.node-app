@@ -1,0 +1,16 @@
+FROM node:9.9.0
+
+# Set working directory
+WORKDIR /app
+# Clone the repository
+RUN git clone https://github.com/kkenan/basic-microservices.git
+
+# Install node dependencies
+WORKDIR /app/basic-microservices/node-app
+RUN npm install
+
+# Expose the port (the node app listens on 8081)
+EXPOSE 8081
+
+# Start the node application
+CMD ["node", "index.js"]

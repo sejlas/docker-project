@@ -1,0 +1,22 @@
+# Build the spring-boot-app using Maven
+FROM maven:3-openjdk-8 AS builder
+
+# Set the working directory
+WORKDIR /app
+# Clone the repository
+RUN git clone https://github.com/kkenan/basic-microservices.git
+WORKDIR /app/basic-microservices/spring-boot-app
+
+# Build the application
+RUN mvn clean package
+
+# Create the final runtime image with the built jar
+FROM openjdk:8-jdk
+WORKDIR /app
+
+# Copy the jar from the builder stage
+COPY --from=builder app/basic-microservices/spring-boot-app/target/spring-boot-app-1.0-SNAPSHOT.jar ./spring-boot-app.jar
+
+EXPOSE 8080
+# Run the Spring Boot application
+ENTRYPOINT ["java", "-jar", "spring-boot-app.jar"]
